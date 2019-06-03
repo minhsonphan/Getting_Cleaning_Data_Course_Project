@@ -1,6 +1,3 @@
-packages <- c("data.table")
-sapply(packages, require, character.only = TRUE, quietly = TRUE)
-
 ######################################################################################### 
 ##      Merges the training and the test sets to create one data set for measurement data
 ##      Extracts only the measurements on the mean and standard deviation for each measurement
@@ -198,6 +195,10 @@ process_triaxal_data <- function(test_training = "test",file_name, axisXYZ){
         
 }
 
+
+library(reshape2)
+library(data.table)
+
 ## Creates data directory if needed
 if(!file.exists("data")){
         dir.create("data")
@@ -217,12 +218,12 @@ dt_body_acc_Z_test <- process_triaxal_data(test_training = "test",file_name = "b
 
 dt_body_acc_X_training <- process_triaxal_data(test_training = "training",file_name = "body_acc_x_train.txt", axisXYZ="X")
 dt_body_acc_Y_training <- process_triaxal_data(test_training = "training",file_name = "body_acc_y_train.txt", axisXYZ="Y")
-dt_body_acc_Z_traning <- process_triaxal_data(test_training = "training",file_name = "body_acc_z_train.txt", axisXYZ="Z")
+dt_body_acc_Z_training <- process_triaxal_data(test_training = "training",file_name = "body_acc_z_train.txt", axisXYZ="Z")
 
-dt_body_acc_final <- rbind(dt_body_acc_X_test,dt_body_acc_Y_test,dt_body_acc_Z_test,dt_body_acc_X_training,dt_body_acc_Y_training,dt_body_acc_Z_traning)
+dt_body_acc_final <- rbind(dt_body_acc_X_test,dt_body_acc_Y_test,dt_body_acc_Z_test,dt_body_acc_X_training,dt_body_acc_Y_training,dt_body_acc_Z_training)
 
 ## write dt_body_acc_final into CSV file
-write.table(dt_body_acc_final, file = "./Data/Tidy Dataset/triaxial_body_acceleration.csv", sep = ",", row.names=FALSE)
+write.table(dt_body_acc_final, file = "./Data/Tidy Dataset/triaxial_body_acceleration.txt", sep = ",", row.names=FALSE)
 
 
 ## process the Triaxial Angular velocity from the gyroscope. 
@@ -237,7 +238,7 @@ dt_body_gyro_Z_training <- process_triaxal_data(test_training = "training",file_
 dt_body_gyro_final <- rbind(dt_body_gyro_X_test,dt_body_gyro_Y_test,dt_body_gyro_Z_test,dt_body_gyro_X_training,dt_body_gyro_Y_training,dt_body_gyro_Z_training)
 
 ## write dt_body_gyro_final into CSV file
-write.table(dt_body_gyro_final, file = "./Data/Tidy Dataset/triaxial_body_gyro.csv", sep = ",", row.names=FALSE)
+write.table(dt_body_gyro_final, file = "./Data/Tidy Dataset/triaxial_body_gyro.txt", sep = ",", row.names=FALSE)
 
 
 
@@ -253,7 +254,7 @@ dt_total_acc_Z_training <- process_triaxal_data(test_training = "training",file_
 dt_total_acc_final <- rbind(dt_total_acc_X_test,dt_total_acc_Y_test,dt_total_acc_Z_test,dt_total_acc_X_training,dt_total_acc_Y_training,dt_total_acc_Z_training)
 
 ## write dt_total_acc_final into CSV file
-write.table(dt_total_acc_final, file = "./Data/Tidy Dataset/triaxial_total_acc.csv", sep = ",", row.names=FALSE)
+write.table(dt_total_acc_final, file = "./Data/Tidy Dataset/triaxial_total_acc.txt", sep = ",", row.names=FALSE)
 
 
 
@@ -273,7 +274,7 @@ names(dt_measurement)[1]<-"experimentId"
 
 
 ## write dt_measurement into CSV file
-write.table(dt_measurement, file = "./Data/Tidy Dataset/measurement.csv", sep = ",", row.names=FALSE)
+write.table(dt_measurement, file = "./Data/Tidy Dataset/measurement.txt", sep = ",", row.names=FALSE)
 
 ## process a second, independent tidy data set with the average of each variable for each activity and each subject.
 dt_measurement_mean <- melt(dt_measurement_mean,id=c("subject","activity","settype"),measure.vars=dt_features_mean_std$V2)
@@ -284,6 +285,6 @@ names(dt_measurement_mean2)[5]<-"mean"
 
 
 ## write dt_measurement_mean2 into CSV file
-write.table(dt_measurement_mean2, file = "./Data/Tidy Dataset/measurement_mean.csv", sep = ",", row.names=FALSE)
+write.table(dt_measurement_mean2, file = "./Data/Tidy Dataset/measurement_mean.txt", sep = ",", row.names=FALSE)
 
 
